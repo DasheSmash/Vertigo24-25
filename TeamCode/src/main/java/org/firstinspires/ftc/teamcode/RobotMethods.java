@@ -103,7 +103,7 @@ public class RobotMethods extends LinearOpMode {
         rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
-
+    //Test
     //This method moves the robot for a set amount of time depending on the call's arguments (Only use for autonomous):
     //haltDistance is the distance in CM of which the robot will stop if the Distance Sensor detects something closer than the specified distance (Used to stop collisions)
     //Set haltDistance to 0 or less if you do not want to use the distance feature.
