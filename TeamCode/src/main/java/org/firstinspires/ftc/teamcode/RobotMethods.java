@@ -17,17 +17,16 @@ public class RobotMethods extends LinearOpMode {
     public DcMotor rightFrontDrive;
     public DcMotor rightBackDrive;
     public DcMotor armMotor;
+    public DcMotor linearMotor;
     public Servo intakeJoint;
     public Servo intakeSystem;
     public DistanceSensor distanceSensor;
-    public static boolean test2 = false;
-    //Set the gear ratio (if you're using more than 1 gear for the motor):
-    private double degRatio = 3 * 1.5; //3 for the motor to arm gear ratio on the test robot, and 1.5 for the encoder to motor ratio.
-
+    private double encoderRatio = 1.5;
+    //Set the gear and encoder ratio (if your robot has no encoder then set this to 1):
+    private double degRatio = 3 * encoderRatio; //3 for the motor to arm gear ratio on the test robot, and 1.5 for the encoder to motor ratio (encoder data is precisely inaccurate)
     //Required to have this method when extending LinearOpMode:
     @Override
-    public void runOpMode() {
-    }
+    public void runOpMode(){}
 
     //Declares all of the motors and servos, and can add more if needed:
     public RobotMethods(HardwareMap hardwareMap) {
@@ -40,6 +39,7 @@ public class RobotMethods extends LinearOpMode {
         rightFrontDrive = hardwareMap.get(DcMotor.class, "FR");
         rightBackDrive = hardwareMap.get(DcMotor.class, "BR");
         armMotor = hardwareMap.get(DcMotor.class, "am1");
+        linearMotor = hardwareMap.get(DcMotor.class, "ls");
         intakeJoint = hardwareMap.get(Servo.class, "servoangle");
         intakeSystem = hardwareMap.get(Servo.class, "servowheel");
         distanceSensor = hardwareMap.get(DistanceSensor.class, "DS");
@@ -51,6 +51,9 @@ public class RobotMethods extends LinearOpMode {
         armMotor.setDirection(DcMotor.Direction.FORWARD); //Sets direction
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //Sets current position to degree 0
         armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //Starts encoder
+        linearMotor.setDirection(DcMotor.Direction.FORWARD); //Sets direction
+        linearMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //Sets current position to degree 0
+        linearMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //Starts encoder
     }
 
     //Moves the robot according to given parameters: (Note: the method runs once and sets the power, it does not stop the robot automatically, the user must do that manually by using move(0,0,0) )
@@ -103,13 +106,11 @@ public class RobotMethods extends LinearOpMode {
         rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
-    //Test
-    //Test from home
+
     //This method moves the robot for a set amount of time depending on the call's arguments (Only use for autonomous):
     //haltDistance is the distance in CM of which the robot will stop if the Distance Sensor detects something closer than the specified distance (Used to stop collisions)
     //Set haltDistance to 0 or less if you do not want to use the distance feature.
     public void timedMotorMove(int maxtime, double axial, double lateral, double yaw, int haltDistance) {
-        test2 = opModeIsActive();
         for (double startTime = runtime.milliseconds(); runtime.milliseconds() - startTime < maxtime && distanceSensor.getDistance(DistanceUnit.CM) > haltDistance;) {
             move(axial, lateral, yaw);
         }
@@ -130,9 +131,10 @@ public class RobotMethods extends LinearOpMode {
     public int getArmDegree(){
         return (int)(armMotor.getCurrentPosition()/degRatio);
     }
+
+    //This method was designed for FTC Centerstage 2023-2024:
     // This method is used to control the arm and intake system's position during autonomous,
-    // Need to give time to move otherwise it will not be able to complete the action (can just set a static time in the method),
-    // This method does not need a timed loop if the method call is already in a long enough loop:
+    // Need to give time to move otherwise it will not be able to complete the action (can just set a static time in the method)
     public void intakeAuto(int position, int timeToMove) {
         //Position 0 is starting position, Position 1 is to intake pixels, Position 2 is to go to the backboard, and position 3 is to put a pixel on the stripe:
         double[][] armPositions = {{0,0.98},{0,0.4},{170,0.95},{20,0.32}};
@@ -149,29 +151,26 @@ public class RobotMethods extends LinearOpMode {
         }
     }
     /**/public void IOSystem(boolean intake, int time){
-        for(double starttime = runtime.milliseconds(); runtime.milliseconds()-starttime<time;){
-            if(intake){intakeSystem.setPosition(0.9);}
-            else{intakeSystem.setPosition(0.1);}
+        if(intake) {
+            for (double starttime = runtime.milliseconds(); runtime.milliseconds() - starttime < time; ) {
+                intakeSystem.setPosition(0.9);
+            }
+        }
+        else {
+            for (double starttime = runtime.milliseconds(); runtime.milliseconds() - starttime < time; ) {
+                intakeSystem.setPosition(0.1);
+            }
         }
         intakeSystem.setPosition(0.5);
     }
+    public void setArmDistance(double distance){
+        linearMotor.setTargetPosition((int)(distance*encoderRatio));
+        linearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linearMotor.setPower(0.1);
+    }
+    public void changeArmDistance(double distance){
+        linearMotor.setTargetPosition((int)(linearMotor.getCurrentPosition()+(distance*encoderRatio)));
+        linearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linearMotor.setPower(0.1);
+    }
 }
-
-/*
-leftFrontDrive = hardwareMap.get(DcMotor.class, "FL");
-leftBackDrive = hardwareMap.get(DcMotor.class, "BL");
-rightFrontDrive = hardwareMap.get(DcMotor.class, "FR");
-rightBackDrive = hardwareMap.get(DcMotor.class, "BR");
-armMotor = hardwareMap.get(DcMotor.class, "am1");
-intakeJoint = hardwareMap.get(Servo.class, "servoangle");
-intakeSystem = hardwareMap.get(Servo.class, "servowheel");
-distanceSensor = hardwareMap.get(DistanceSensor.class, "DS");
-leftFrontDrive = hardwareMap.get(DcMotor.class, "FRONT LEFT WHEEL NAME");
-leftBackDrive = hardwareMap.get(DcMotor.class, "BACK LEFT WHEEL NAME");
-rightFrontDrive = hardwareMap.get(DcMotor.class, "FRONT RIGHT WHEEL NAME");
-rightBackDrive = hardwareMap.get(DcMotor.class, "BACK RIGHT WHEEL NAME");
-armMotor = hardwareMap.get(DcMotor.class, "ARM MOTOR NAME");
-intakeJoint = hardwareMap.get(Servo.class, "INTAKE ANGLE SERVO NAME");
-intakeSystem = hardwareMap.get(Servo.class, "INTAKE SYSTEM INPUT/OUTPUT NAME");
-distanceSensor = hardwareMap.get(DistanceSensor.class, "DISTANCE SENSOR NAME");
- */

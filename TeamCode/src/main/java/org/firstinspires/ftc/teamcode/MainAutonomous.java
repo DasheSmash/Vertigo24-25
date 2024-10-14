@@ -69,7 +69,6 @@ public class MainAutonomous extends LinearOpMode {
         while (opModeIsActive()) {
             telemetry.addData("Distance: ", RMO.distanceSensor.getDistance(DistanceUnit.CM));
             telemetry.addData("Op mode is active?: ", test);
-            telemetry.addData("Op mode is active2?: ", RobotMethods.test2);
             telemetry.update();
         }
     }

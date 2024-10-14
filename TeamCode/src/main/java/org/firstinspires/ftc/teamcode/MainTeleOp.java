@@ -23,7 +23,9 @@ public class MainTeleOp extends LinearOpMode {
         //Variables for drive speed, arm speed, manual arm movement, and preset arm positions:
         double driveMultiplier = 0.5;
         double armMultiplier = 0.5;
+        double distanceMultiplier = 0.5;
         double armChange = 0.0;
+        double armDistance = 0.0;
         int changePos = -1;
         double[][] armPositions = {{0,0.98},{0,0.4},{170,0.95},{20,0.32}}; // Preset arm positions
         //Waits for the play button to be pressed:
@@ -42,6 +44,9 @@ public class MainTeleOp extends LinearOpMode {
             if (gamepad1.left_trigger > 0.1f){driveMultiplier = 0.25;}
             else if (gamepad1.right_trigger > 0.1f){driveMultiplier = 1;}
             else{driveMultiplier = 0.5;}
+            if (gamepad2.left_trigger > 0.1f){distanceMultiplier = 0.25;}
+            else if (gamepad2.right_trigger > 0.1f){distanceMultiplier = 1;}
+            else{distanceMultiplier = 0.5;}
             //Implements the changes to the robot's position from other parts of the code:
             RMO.move(axial,lateral,yaw);
             if (gamepad2.dpad_left){changePos = -1;}
@@ -66,6 +71,8 @@ public class MainTeleOp extends LinearOpMode {
             /**/else if (gamepad2.left_bumper){RMO.intakeSystem.setPosition(0.1);}
             /**/else{RMO.intakeSystem.setPosition(0.5);}
             armChange += gamepad2.left_stick_y * armMultiplier;
+            armDistance = gamepad2.right_stick_y * distanceMultiplier;
+            RMO.changeArmDistance(armDistance);
             if(changePos != -1){RMO.setArmDegree((int)(armPositions[changePos][0] + armChange));/**/RMO.intakeJoint.setPosition(armPositions[changePos][1]);}
             else{RMO.armMotor.setPower(0);}
             /**/if(gamepad1.dpad_up){RMO.changeArmDegree(120);}
