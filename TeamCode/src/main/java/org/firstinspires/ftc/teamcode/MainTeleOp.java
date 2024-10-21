@@ -22,10 +22,12 @@ public class MainTeleOp extends LinearOpMode {
         double yaw = 0.0;
         //Variables for drive speed, arm speed, manual arm movement, and preset arm positions:
         double driveMultiplier = 0.5;
-        double armMultiplier = 0.5;
-        double distanceMultiplier = 0.5;
+        double armMultiplier = 1;
+        double distanceMultiplier = 1;
         double armChange = 0.0;
         double armDistance = 0.0;
+        int estArmPos = 0;
+        int estSlidePos = 0;
         int changePos = -1;
         double[][] armPositions = {{0,0.98},{0,0.4},{170,0.95},{20,0.32}}; // Preset arm positions
         //Waits for the play button to be pressed:
@@ -44,9 +46,9 @@ public class MainTeleOp extends LinearOpMode {
             if (gamepad1.left_trigger > 0.1f){driveMultiplier = 0.25;}
             else if (gamepad1.right_trigger > 0.1f){driveMultiplier = 1;}
             else{driveMultiplier = 0.5;}
-            if (gamepad2.left_trigger > 0.1f){distanceMultiplier = 0.25;}
-            else if (gamepad2.right_trigger > 0.1f){distanceMultiplier = 1;}
-            else{distanceMultiplier = 0.5;}
+            if (gamepad2.left_trigger > 0.1f){distanceMultiplier = 2;}
+            else if (gamepad2.right_trigger > 0.1f){distanceMultiplier = 0.5;}
+            else{distanceMultiplier = 1;}
             //Implements the changes to the robot's position from other parts of the code:
             RMO.move(axial,lateral,yaw);
             if (gamepad2.dpad_left){changePos = -1;}
@@ -67,23 +69,27 @@ public class MainTeleOp extends LinearOpMode {
                 changePos = 3;
             }
             if(gamepad2.b || gamepad2.a || gamepad2.x || gamepad2.y){armChange = 0;}
-            /**/if (gamepad2.right_bumper){RMO.intakeSystem.setPosition(0.9);}
-            /**/else if (gamepad2.left_bumper){RMO.intakeSystem.setPosition(0.1);}
-            /**/else{RMO.intakeSystem.setPosition(0.5);}
-            armChange += gamepad2.left_stick_y * armMultiplier;
-            armDistance = gamepad2.right_stick_y * distanceMultiplier;
-            RMO.changeArmDistance(armDistance);
-            if(changePos != -1){RMO.setArmDegree((int)(armPositions[changePos][0] + armChange));/**/RMO.intakeJoint.setPosition(armPositions[changePos][1]);}
-            else{RMO.armMotor.setPower(0);}
-            /**/if(gamepad1.dpad_up){RMO.changeArmDegree(120);}
-            /**/else if(gamepad1.dpad_down){RMO.changeArmDegree(-45);}
-            //RMO.setArmDegreeChange((int)gamepad2.left_stick_y);
-            //RMO.armMotor.setPower(gamepad2.left_stick_y);
+            armChange = gamepad2.right_stick_y * armMultiplier;
+            armDistance = gamepad2.left_stick_y * distanceMultiplier;
+            estArmPos += (int)armChange;
+            estSlidePos += (int)armDistance;
+            RMO.setArmDistance(estSlidePos);
+            RMO.setArmDegree(estArmPos);
+            //if(changePos != -1){RMO.setArmDegree((int)(armPositions[changePos][0] + armChange));/*RMO.intakeJoint.setPosition(armPositions[changePos][1]);*/}
+            //else{RMO.armMotor.setPower(0);}
+            ///**/if(gamepad1.dpad_up){RMO.changeArmDegree(120);}
+            ///**/else if(gamepad1.dpad_down){RMO.changeArmDegree(-45);}
             //Sends data back to the driver's station:
-            telemetry.addData("Current centimeters from distance sensor: ", RMO.distanceSensor.getDistance(DistanceUnit.CM));
+            //telemetry.addData("Current centimeters from distance sensor: ", RMO.distanceSensor.getDistance(DistanceUnit.CM));
             telemetry.addData("arm Position:", RMO.armMotor.getCurrentPosition());
             telemetry.addData("Gear position: ", RMO.armMotor.getCurrentPosition()/(3*1.5));
             telemetry.addData("Position: ", changePos);
+            telemetry.addData("G2_RS_Y: ", gamepad2.right_stick_y);
+            telemetry.addData("G2_LS_Y: ", gamepad2.left_stick_y);
+            telemetry.addData("Arm pos: ", RMO.armTarget);
+            telemetry.addData("Slide pos: ", RMO.slideTarget);
+            telemetry.addData("Est Arm Target: ", estArmPos);
+            telemetry.addData("Est Slide Target: ", estSlidePos);
             telemetry.update();
         }
     }

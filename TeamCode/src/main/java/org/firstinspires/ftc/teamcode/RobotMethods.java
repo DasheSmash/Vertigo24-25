@@ -24,6 +24,8 @@ public class RobotMethods extends LinearOpMode {
     private double encoderRatio = 1.5;
     //Set the gear and encoder ratio (if your robot has no encoder then set this to 1):
     private double degRatio = 3 * encoderRatio; //3 for the motor to arm gear ratio on the test robot, and 1.5 for the encoder to motor ratio (encoder data is precisely inaccurate)
+    public static double armTarget = 0.0;
+    public static double slideTarget = 0.0;
     //Required to have this method when extending LinearOpMode:
     @Override
     public void runOpMode(){}
@@ -39,10 +41,10 @@ public class RobotMethods extends LinearOpMode {
         rightFrontDrive = hardwareMap.get(DcMotor.class, "FR");
         rightBackDrive = hardwareMap.get(DcMotor.class, "BR");
         armMotor = hardwareMap.get(DcMotor.class, "am1");
-        linearMotor = hardwareMap.get(DcMotor.class, "ls");
-        intakeJoint = hardwareMap.get(Servo.class, "servoangle");
-        intakeSystem = hardwareMap.get(Servo.class, "servowheel");
-        distanceSensor = hardwareMap.get(DistanceSensor.class, "DS");
+        linearMotor = hardwareMap.get(DcMotor.class, "linslide");
+        //intakeJoint = hardwareMap.get(Servo.class, "servoangle");
+        //intakeSystem = hardwareMap.get(Servo.class, "servowheel");
+        //distanceSensor = hardwareMap.get(DistanceSensor.class, "DS");
         setupArmMotor(); //Method for all of the arm motor setup. Doesn't need to be in a method but it's more organized that way.
     }
 
@@ -118,18 +120,20 @@ public class RobotMethods extends LinearOpMode {
     }
     //Sets arm to requested degree:
     public void setArmDegree(int degree){
+        armTarget = getArmDegree();
         armMotor.setTargetPosition((int)(degree*degRatio));
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armMotor.setPower(0.1);
+        armMotor.setPower(0.3);
     }
     //Changes arm by requested degree:
     public void changeArmDegree(int degree){
-        armMotor.setTargetPosition((int)(armMotor.getCurrentPosition()+(degree*degRatio)));
+        armTarget = (int)(getArmDegree()+(degree*encoderRatio));
+        armMotor.setTargetPosition((int)armTarget);
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armMotor.setPower(0.1);
+        armMotor.setPower(0.8);
     }
     public int getArmDegree(){
-        return (int)(armMotor.getCurrentPosition()/degRatio);
+        return (int)(armMotor.getCurrentPosition()/encoderRatio);
     }
 
     //This method was designed for FTC Centerstage 2023-2024:
@@ -164,13 +168,18 @@ public class RobotMethods extends LinearOpMode {
         intakeSystem.setPosition(0.5);
     }
     public void setArmDistance(double distance){
+        slideTarget = getSlideDegree();
         linearMotor.setTargetPosition((int)(distance*encoderRatio));
         linearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linearMotor.setPower(0.1);
+        linearMotor.setPower(0.3);
     }
     public void changeArmDistance(double distance){
-        linearMotor.setTargetPosition((int)(linearMotor.getCurrentPosition()+(distance*encoderRatio)));
+        slideTarget = (int)(getSlideDegree()+(distance*encoderRatio));
+        linearMotor.setTargetPosition((int)slideTarget);
         linearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linearMotor.setPower(0.1);
+        linearMotor.setPower(0.8);
+    }
+    public int getSlideDegree(){
+        return (int)(linearMotor.getCurrentPosition()/encoderRatio);
     }
 }
