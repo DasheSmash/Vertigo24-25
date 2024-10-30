@@ -16,6 +16,7 @@ public class MainTeleOp extends LinearOpMode {
         //Sets the robot's wheels to go 'backwards', and for the robot's motors to brake when at 0 power:
         RMO.SetDirectionBackwards();
         RMO.setZeroBehaviorAll();
+
         //Variables to move the robot:
         double axial = 0.0;
         double lateral = 0.0;
@@ -30,57 +31,72 @@ public class MainTeleOp extends LinearOpMode {
         int estSlidePos = 0;
         int changePos = -1;
         double[][] armPositions = {{0,0.98},{0,0.4},{170,0.95},{20,0.32}}; // Preset arm positions
+
         //Waits for the play button to be pressed:
         waitForStart();
         runtime.reset();
         //Repeatedly runs after the play button is pressed:
         while(opModeIsActive()) {
-            // Pressing "back" on either of the controllers will stop the code
-            // It's recommended that this is turned off during competition:
+
+            // Pressing "back" on either of the controllers will stop the code:
             if (gamepad1.back || gamepad2.back){terminateOpModeNow();}
+
             //Changes where the robot will go according to the stick directions and the speed setting:
             axial = driveMultiplier * (-gamepad1.left_stick_y);  // Note: pushing stick forward gives negative value
             lateral = driveMultiplier * (gamepad1.left_stick_x);
             yaw = driveMultiplier * (-gamepad1.right_stick_x);
+
             //Determines speed setting:
             if (gamepad1.right_trigger > 0.1f){driveMultiplier = 0.25;}
             else if (gamepad1.left_trigger > 0.1f){driveMultiplier = 1;}
             else{driveMultiplier = 0.5;}
+
             if (gamepad2.right_trigger > 0.1f){distanceMultiplier = 8;}
             else if (gamepad2.left_trigger > 0.1f){distanceMultiplier = 4;}
             else{distanceMultiplier = 6;}
+
+            if (gamepad2.left_bumper){armMultiplier = 2;}
+            else if (gamepad2.right_bumper){armMultiplier = 0.5;}
+            else{armMultiplier = 1;}
+
             //Implements the changes to the robot's position from other parts of the code:
             RMO.move(axial,lateral,yaw);
+
+            //Preset arm position code:
             if (gamepad2.dpad_left){changePos = -1;}
             //Full Back (To starting position):
             else if (gamepad2.a) {
                 changePos = 0;
             }
             //Full forward to intake pixels:
-            else if (gamepad2.b || gamepad2.dpad_down) {
+            else if (gamepad2.b) {
                 changePos = 1;
             }
             //Deposit pixels on Backboard:
-            else if (gamepad2.x || gamepad2.dpad_up) {
+            else if (gamepad2.x) {
                 changePos = 2;
             }
             //Deposit pixels on stripe:
             else if (gamepad2.y) {
                 changePos = 3;
             }
-            if(gamepad2.b || gamepad2.a || gamepad2.x || gamepad2.y){armChange = 0;}
+            //if(gamepad2.b || gamepad2.a || gamepad2.x || gamepad2.y){armChange = 0;}
+            //if(changePos != -1){RMO.setArmDegree((int)(armPositions[changePos][0] + armChange));}
+
+            //Arm Code:
             armChange = gamepad2.right_stick_y * armMultiplier;
             armDistance = gamepad2.left_stick_y * distanceMultiplier;
-            estArmPos += (int)armChange;
-            estSlidePos += (int)armDistance;
-            estSlidePos = Math.min(estSlidePos, 4000);
-            estSlidePos = Math.max(estSlidePos, 0);
-            RMO.setArmDistance(estSlidePos);
-            RMO.setArmDegree(estArmPos);
-            //if(changePos != -1){RMO.setArmDegree((int)(armPositions[changePos][0] + armChange));/*RMO.intakeJoint.setPosition(armPositions[changePos][1]);*/}
-            //else{RMO.armMotor.setPower(0);}
-            ///**/if(gamepad1.dpad_up){RMO.changeArmDegree(120);}
-            ///**/else if(gamepad1.dpad_down){RMO.changeArmDegree(-45);}
+            if (Math.abs(armChange) > 0.1){
+                estArmPos += (int)armChange;
+                RMO.setArmDegree(estArmPos);
+            }
+            if (Math.abs(armDistance) > 0.1){
+                estSlidePos += (int)armDistance;
+                estSlidePos = Math.min(estSlidePos, 4000);
+                estSlidePos = Math.max(estSlidePos, 0);
+                RMO.setArmDistance(estSlidePos);
+            }
+
             //Sends data back to the driver's station:
             //telemetry.addData("Current centimeters from distance sensor: ", RMO.distanceSensor.getDistance(DistanceUnit.CM));
             telemetry.addData("arm Position:", RMO.armMotor.getCurrentPosition());
