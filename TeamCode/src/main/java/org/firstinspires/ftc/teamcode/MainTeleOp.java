@@ -43,12 +43,12 @@ public class MainTeleOp extends LinearOpMode {
             lateral = driveMultiplier * (gamepad1.left_stick_x);
             yaw = driveMultiplier * (-gamepad1.right_stick_x);
             //Determines speed setting:
-            if (gamepad1.left_trigger > 0.1f){driveMultiplier = 0.25;}
-            else if (gamepad1.right_trigger > 0.1f){driveMultiplier = 1;}
+            if (gamepad1.right_trigger > 0.1f){driveMultiplier = 0.25;}
+            else if (gamepad1.left_trigger > 0.1f){driveMultiplier = 1;}
             else{driveMultiplier = 0.5;}
-            if (gamepad2.left_trigger > 0.1f){distanceMultiplier = 2;}
-            else if (gamepad2.right_trigger > 0.1f){distanceMultiplier = 0.5;}
-            else{distanceMultiplier = 1;}
+            if (gamepad2.right_trigger > 0.1f){distanceMultiplier = 8;}
+            else if (gamepad2.left_trigger > 0.1f){distanceMultiplier = 4;}
+            else{distanceMultiplier = 6;}
             //Implements the changes to the robot's position from other parts of the code:
             RMO.move(axial,lateral,yaw);
             if (gamepad2.dpad_left){changePos = -1;}
@@ -73,6 +73,8 @@ public class MainTeleOp extends LinearOpMode {
             armDistance = gamepad2.left_stick_y * distanceMultiplier;
             estArmPos += (int)armChange;
             estSlidePos += (int)armDistance;
+            estSlidePos = Math.min(estSlidePos, 4000);
+            estSlidePos = Math.max(estSlidePos, 0);
             RMO.setArmDistance(estSlidePos);
             RMO.setArmDegree(estArmPos);
             //if(changePos != -1){RMO.setArmDegree((int)(armPositions[changePos][0] + armChange));/*RMO.intakeJoint.setPosition(armPositions[changePos][1]);*/}
@@ -86,10 +88,10 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("Position: ", changePos);
             telemetry.addData("G2_RS_Y: ", gamepad2.right_stick_y);
             telemetry.addData("G2_LS_Y: ", gamepad2.left_stick_y);
-            telemetry.addData("Arm pos: ", RMO.armTarget);
-            telemetry.addData("Slide pos: ", RMO.slideTarget);
-            telemetry.addData("Est Arm Target: ", estArmPos);
-            telemetry.addData("Est Slide Target: ", estSlidePos);
+            telemetry.addData("Arm Target: ", estArmPos);
+            telemetry.addData("Slide Target: ", estSlidePos);
+            telemetry.addData("Linslide current detected pos: ", RMO.linearMotor.getCurrentPosition()); //Max ~4000 degrees
+            telemetry.addData("Linslide current actual pos: ", RMO.getSlideDegree()); //Max ~2650 degrees
             telemetry.update();
         }
     }
