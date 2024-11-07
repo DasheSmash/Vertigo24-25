@@ -84,6 +84,7 @@ public class MainTeleOp extends LinearOpMode {
             //if(changePos != -1){RMO.setArmDegree((int)(armPositions[changePos][0] + armChange));}
 
             //Arm Code:
+            //DO: make estArmPos unable to go above 15 degrees, and unable to go below -80 degrees
             armChange = gamepad2.right_stick_y * armMultiplier;
             armDistance = gamepad2.left_stick_y * distanceMultiplier;
             if (Math.abs(armChange) > 0.1){
@@ -92,8 +93,8 @@ public class MainTeleOp extends LinearOpMode {
             }
             if (Math.abs(armDistance) > 0.1){
                 estSlidePos += (int)armDistance;
-                estSlidePos = Math.min(estSlidePos, 4000);
-                estSlidePos = Math.max(estSlidePos, 0);
+                estSlidePos = Math.max(estSlidePos, -2700);
+                estSlidePos = Math.min(estSlidePos, 0);
                 RMO.setArmDistance(estSlidePos);
             }
 
