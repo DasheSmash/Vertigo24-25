@@ -45,17 +45,29 @@ public class RobotMethods extends LinearOpMode {
         //intakeJoint = hardwareMap.get(Servo.class, "servoangle");
         //intakeSystem = hardwareMap.get(Servo.class, "servowheel");
         //distanceSensor = hardwareMap.get(DistanceSensor.class, "DS");
-        setupArmMotor(); //Method for all of the arm motor setup. Doesn't need to be in a method but it's more organized that way.
+        setupMotors(); //Method for all of the arm motor setup. Doesn't need to be in a method but it's more organized that way.
     }
 
     //Sets the direction of the motor and enables the encoder for the motor:
-    public void setupArmMotor() {
+    public void setupMotors() {
         armMotor.setDirection(DcMotor.Direction.FORWARD); //Sets direction
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //Sets current position to degree 0
         armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //Starts encoder
         linearMotor.setDirection(DcMotor.Direction.FORWARD); //Sets direction
         linearMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //Sets current position to degree 0
         linearMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //Starts encoder
+        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD); //Sets direction
+        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //Sets current position to degree 0
+        leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //Starts encoder
+        leftBackDrive.setDirection(DcMotor.Direction.FORWARD); //Sets direction
+        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //Sets current position to degree 0
+        leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //Starts encoder
+        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD); //Sets direction
+        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //Sets current position to degree 0
+        rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //Starts encoder
+        rightBackDrive.setDirection(DcMotor.Direction.FORWARD); //Sets direction
+        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //Sets current position to degree 0
+        rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //Starts encoder
     }
 
     //Moves the robot according to given parameters: (Note: the method runs once and sets the power, it does not stop the robot automatically, the user must do that manually by using move(0,0,0) )
@@ -181,5 +193,36 @@ public class RobotMethods extends LinearOpMode {
     }
     public int getSlideDegree(){
         return (int)(linearMotor.getCurrentPosition()/encoderRatio);
+    }
+    public void setLFDegree(int degree){
+        leftFrontDrive.setTargetPosition(degree);
+        leftFrontDrive.setPower(1);
+    }
+    public void setLBDegree(int degree){
+        leftBackDrive.setTargetPosition(degree);
+        leftBackDrive.setPower(1);
+    }
+    public void setRFDegree(int degree){
+        rightFrontDrive.setTargetPosition(degree);
+        rightFrontDrive.setPower(1);
+    }
+    public void setRBDegree(int degree){
+        rightBackDrive.setTargetPosition(degree);
+        rightBackDrive.setPower(1);
+    }
+    public void setDriveDegree(int LF, int LB, int RF, int RB){
+        setLFDegree(LF);
+        setLBDegree(LB);
+        setRFDegree(RF);
+        setRBDegree(RB);
+    }
+    public void moveForwardDegree(int degree){
+        setLFDegree(degree);
+        setLBDegree(degree);
+        setRFDegree(degree);
+        setRBDegree(degree);
+    }
+    public int getWheelDegree(DcMotor wheel){
+        return (int)(wheel.getCurrentPosition()/encoderRatio);
     }
 }
