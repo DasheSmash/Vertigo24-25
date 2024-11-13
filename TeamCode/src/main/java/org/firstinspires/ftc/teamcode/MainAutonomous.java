@@ -65,6 +65,12 @@ public class MainAutonomous extends LinearOpMode {
         for(double starttime = runtime.milliseconds(); runtime.milliseconds() - starttime < 3000;){RMO.intakeJoint.setPosition(0.4);}
         sleep(3000);
         RMO.IOSystem(true,3000);
+
+        /*System.out.println("hi");
+        int m = Math.max(1,2);
+
+        RMO.setWheelDegree(RMO.leftFrontDrive, 50);
+*/
         //Outputs information until the end of the Autonomous Period:
         while (opModeIsActive()) {
             telemetry.addData("Distance: ", RMO.distanceSensor.getDistance(DistanceUnit.CM));

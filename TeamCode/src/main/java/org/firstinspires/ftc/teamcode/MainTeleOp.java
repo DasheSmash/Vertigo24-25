@@ -55,9 +55,9 @@ public class MainTeleOp extends LinearOpMode {
             else if (gamepad2.left_trigger > 0.1f){distanceMultiplier = 4;}
             else{distanceMultiplier = 6;}
 
-            if (gamepad2.left_bumper){armMultiplier = 2;}
+            /*if (gamepad2.left_bumper){armMultiplier = 2;}
             else if (gamepad2.right_bumper){armMultiplier = 0.5;}
-            else{armMultiplier = 1;}
+            else{armMultiplier = 1;}*/
 
             //Implements the changes to the robot's position from other parts of the code:
             RMO.move(axial,lateral,yaw);
@@ -97,7 +97,9 @@ public class MainTeleOp extends LinearOpMode {
                 estSlidePos = Math.min(estSlidePos, 0);
                 RMO.setArmDistance(estSlidePos);
             }
-
+            if(gamepad2.right_bumper){RMO.openClaw();}
+            else if(gamepad2.left_bumper){RMO.closeClaw();}
+            else{RMO.stopClaw();}
             //Sends data back to the driver's station:
             //telemetry.addData("Current centimeters from distance sensor: ", RMO.distanceSensor.getDistance(DistanceUnit.CM));
             telemetry.addData("arm Position:", RMO.armMotor.getCurrentPosition());

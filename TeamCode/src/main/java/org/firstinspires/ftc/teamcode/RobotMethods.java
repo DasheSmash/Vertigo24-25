@@ -20,6 +20,8 @@ public class RobotMethods extends LinearOpMode {
     public DcMotor linearMotor;
     public Servo intakeJoint;
     public Servo intakeSystem;
+    public Servo claw1;
+    public Servo claw2;
     public DistanceSensor distanceSensor;
     private double encoderRatio = 1.5;
     //Set the gear and encoder ratio (if your robot has no encoder then set this to 1):
@@ -42,6 +44,8 @@ public class RobotMethods extends LinearOpMode {
         rightBackDrive = hardwareMap.get(DcMotor.class, "BR");
         armMotor = hardwareMap.get(DcMotor.class, "am1");
         linearMotor = hardwareMap.get(DcMotor.class, "linslide");
+        claw1 = hardwareMap.get(Servo.class, "c1");
+        claw2 = hardwareMap.get(Servo.class, "c2");
         //intakeJoint = hardwareMap.get(Servo.class, "servoangle");
         //intakeSystem = hardwareMap.get(Servo.class, "servowheel");
         //distanceSensor = hardwareMap.get(DistanceSensor.class, "DS");
@@ -194,35 +198,45 @@ public class RobotMethods extends LinearOpMode {
     public int getSlideDegree(){
         return (int)(linearMotor.getCurrentPosition()/encoderRatio);
     }
-    public void setLFDegree(int degree){
-        leftFrontDrive.setTargetPosition(degree);
-        leftFrontDrive.setPower(1);
-    }
-    public void setLBDegree(int degree){
-        leftBackDrive.setTargetPosition(degree);
-        leftBackDrive.setPower(1);
-    }
-    public void setRFDegree(int degree){
-        rightFrontDrive.setTargetPosition(degree);
-        rightFrontDrive.setPower(1);
-    }
-    public void setRBDegree(int degree){
-        rightBackDrive.setTargetPosition(degree);
-        rightBackDrive.setPower(1);
-    }
     public void setDriveDegree(int LF, int LB, int RF, int RB){
-        setLFDegree(LF);
-        setLBDegree(LB);
-        setRFDegree(RF);
-        setRBDegree(RB);
+        setWheelDegree(leftFrontDrive, LF);
+        setWheelDegree(leftBackDrive, LB);
+        setWheelDegree(rightFrontDrive, RF);
+        setWheelDegree(rightBackDrive, RB);
     }
-    public void moveForwardDegree(int degree){
-        setLFDegree(degree);
-        setLBDegree(degree);
-        setRFDegree(degree);
-        setRBDegree(degree);
+    public void changeDriveDegree(int LF, int LB, int RF, int RB){
+        changeWheelDegree(leftFrontDrive, LF);
+        changeWheelDegree(leftBackDrive, LB);
+        changeWheelDegree(rightFrontDrive, RF);
+        changeWheelDegree(rightBackDrive, RB);
+    }
+    public void setDegreeForward(int degree){
+        setWheelDegree(leftFrontDrive, degree);
+        setWheelDegree(leftBackDrive, degree);
+        setWheelDegree(rightFrontDrive, degree);
+        setWheelDegree(rightBackDrive, degree);
     }
     public int getWheelDegree(DcMotor wheel){
         return (int)(wheel.getCurrentPosition()/encoderRatio);
+    }
+    public void setWheelDegree(DcMotor wheel, int degree){
+        wheel.setTargetPosition(degree);
+        wheel.setPower(1);
+    }
+    public void changeWheelDegree(DcMotor wheel, int degree){
+        wheel.setTargetPosition(degree+wheel.getCurrentPosition());
+        wheel.setPower(1);
+    }
+    public void openClaw(){
+        claw1.setPosition(0.9);
+        claw2.setPosition(0.1);
+    }
+    public void closeClaw(){
+        claw1.setPosition(0.1);
+        claw2.setPosition(0.9);
+    }
+    public void stopClaw(){
+        claw1.setPosition(0.5);
+        claw2.setPosition(0.5);
     }
 }
