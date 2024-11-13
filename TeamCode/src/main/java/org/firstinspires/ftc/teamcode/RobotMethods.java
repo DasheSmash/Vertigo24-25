@@ -45,7 +45,7 @@ public class RobotMethods extends LinearOpMode {
         armMotor = hardwareMap.get(DcMotor.class, "am1");
         linearMotor = hardwareMap.get(DcMotor.class, "linslide");
         claw1 = hardwareMap.get(Servo.class, "c1");
-        claw2 = hardwareMap.get(Servo.class, "c2");
+        //claw2 = hardwareMap.get(Servo.class, "c2");
         //intakeJoint = hardwareMap.get(Servo.class, "servoangle");
         //intakeSystem = hardwareMap.get(Servo.class, "servowheel");
         //distanceSensor = hardwareMap.get(DistanceSensor.class, "DS");
@@ -227,16 +227,16 @@ public class RobotMethods extends LinearOpMode {
         wheel.setTargetPosition(degree+wheel.getCurrentPosition());
         wheel.setPower(1);
     }
-    public void openClaw(){
-        claw1.setPosition(0.9);
-        claw2.setPosition(0.1);
+    public void openClaw(double degree){
+        claw1.setPosition(claw1.getPosition()+degree);
+        //claw2.setPosition(0.1);
     }
-    public void closeClaw(){
-        claw1.setPosition(0.1);
-        claw2.setPosition(0.9);
+    public void closeClaw(double degree){
+        claw1.setPosition(claw1.getPosition()-degree);
+        //claw2.setPosition(0.9);
     }
     public void stopClaw(){
-        claw1.setPosition(0.5);
-        claw2.setPosition(0.5);
+        //claw1.setPosition(0.5);
+        //claw2.setPosition(0.5);
     }
 }

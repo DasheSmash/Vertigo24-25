@@ -97,9 +97,10 @@ public class MainTeleOp extends LinearOpMode {
                 estSlidePos = Math.min(estSlidePos, 0);
                 RMO.setArmDistance(estSlidePos);
             }
-            if(gamepad2.right_bumper){RMO.openClaw();}
-            else if(gamepad2.left_bumper){RMO.closeClaw();}
-            else{RMO.stopClaw();}
+            if(gamepad2.right_bumper){RMO.openClaw(0.05);}
+            else if(gamepad2.left_bumper){RMO.closeClaw(0.05);}
+            //else{RMO.stopClaw();}
+
             //Sends data back to the driver's station:
             //telemetry.addData("Current centimeters from distance sensor: ", RMO.distanceSensor.getDistance(DistanceUnit.CM));
             telemetry.addData("arm Position:", RMO.armMotor.getCurrentPosition());
@@ -111,6 +112,7 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("Slide Target: ", estSlidePos);
             telemetry.addData("Linslide current detected pos: ", RMO.linearMotor.getCurrentPosition()); //Max ~4000 degrees
             telemetry.addData("Linslide current actual pos: ", RMO.getSlideDegree()); //Max ~2650 degrees
+            telemetry.addData("Claw1 pos: ", RMO.claw1.getPosition());
             telemetry.update();
         }
     }
