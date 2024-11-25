@@ -31,18 +31,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@Autonomous(name="Main Autonomous", group="Robot")
-//This code should be run when the robot starts on the right side of the truss:
-public class MainAutonomous extends LinearOpMode {
-
-    // Declare OpMode members for each of the 4 motors.
+@Autonomous(name="Close Autonomous", group="Robot")
+public class CloseAutonomous extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
-    DistanceSensor distanceSensor;
 
     @Override
     public void runOpMode() {
@@ -54,29 +47,12 @@ public class MainAutonomous extends LinearOpMode {
         telemetry.update();
         waitForStart();
         runtime.reset();
-        boolean test = false;
-        //Moves forward at 0.3 speed for half a second, and then turns right at 0.2 speed for 3/10 of a second, and does not use the haltDistance feature:
-        test = opModeIsActive();
-        RMO.timedMotorMove(1000, 0.3, 0, 0, 0);
-        RMO.timedMotorMove(1000, 0, 0, 0.2, 0);
-        RMO.setArmDegreeAuto(170);
-        RMO.IOSystem(false,3000);
-        RMO.setArmDegreeAuto(0);
-        for(double starttime = runtime.milliseconds(); runtime.milliseconds() - starttime < 3000;){RMO.intakeJoint.setPosition(0.4);}
-        sleep(3000);
-        RMO.IOSystem(true,3000);
-
-        /*System.out.println("hi");
-        int m = Math.max(1,2);
-
-        RMO.setWheelDegree(RMO.leftFrontDrive, 50);
-*/
+        //Moves forward at 0.3 speed for a second:
+        //RMO.timedMotorMove(1000, 0.3, 0, 0, 0);
+        RMO.setDegreeForward((int)(360*1.5)); //Full rotation of every motor
         //Outputs information until the end of the Autonomous Period:
         while (opModeIsActive()) {
-            telemetry.addData("Distance: ", RMO.distanceSensor.getDistance(DistanceUnit.CM));
-            telemetry.addData("Op mode is active?: ", test);
             telemetry.update();
         }
     }
 }
-//This is a comment

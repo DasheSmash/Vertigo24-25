@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode;
 //Imports necessary files:
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 @TeleOp(name="Main TeleOp", group="Linear OpMode")
 public class MainTeleOp extends LinearOpMode {
     //Code that will run when the user presses 'INIT':
@@ -26,9 +26,9 @@ public class MainTeleOp extends LinearOpMode {
         double armMultiplier = 1;
         double distanceMultiplier = 1;
         double armChange = 0.0;
-        double armDistance = 0.0;
-        int estArmPos = 0;
-        int estSlidePos = 0;
+        double slideChange = 0.0;
+        int armPos = 0;
+        int slidePos = 0;
         int changePos = -1;
         double[][] armPositions = {{0,0.98},{0,0.4},{170,0.95},{20,0.32}}; // Preset arm positions
 
@@ -65,37 +65,29 @@ public class MainTeleOp extends LinearOpMode {
             //Preset arm position code:
             if (gamepad2.dpad_left){changePos = -1;}
             //Full Back (To starting position):
-            else if (gamepad2.a) {
-                changePos = 0;
-            }
+            else if (gamepad2.a) {changePos = 0;}
             //Full forward to intake pixels:
-            else if (gamepad2.b) {
-                changePos = 1;
-            }
+            else if (gamepad2.b) {changePos = 1;            }
             //Deposit pixels on Backboard:
-            else if (gamepad2.x) {
-                changePos = 2;
-            }
+            else if (gamepad2.x) {changePos = 2;}
             //Deposit pixels on stripe:
-            else if (gamepad2.y) {
-                changePos = 3;
-            }
+            else if (gamepad2.y) {changePos = 3;}
             //if(gamepad2.b || gamepad2.a || gamepad2.x || gamepad2.y){armChange = 0;}
             //if(changePos != -1){RMO.setArmDegree((int)(armPositions[changePos][0] + armChange));}
 
             //Arm Code:
-            //DO: make estArmPos unable to go above 15 degrees, and unable to go below -80 degrees
+            //DO: make armPos unable to go above 15 degrees, and unable to go below -80 degrees
             armChange = gamepad2.right_stick_y * armMultiplier;
-            armDistance = gamepad2.left_stick_y * distanceMultiplier;
+            slideChange = gamepad2.left_stick_y * distanceMultiplier;
             if (Math.abs(armChange) > 0.1){
-                estArmPos += (int)armChange;
-                RMO.setArmDegree(estArmPos);
+                armPos += (int)armChange;
+                RMO.setArmDegree(armPos);
             }
-            if (Math.abs(armDistance) > 0.1){
-                estSlidePos += (int)armDistance;
-                estSlidePos = Math.max(estSlidePos, -2700);
-                estSlidePos = Math.min(estSlidePos, 0);
-                RMO.setArmDistance(estSlidePos);
+            if (Math.abs(slideChange) > 0.1){
+                slidePos += (int)slideChange;
+                slidePos = Math.max(slidePos, -2700);
+                slidePos = Math.min(slidePos, 0);
+                RMO.setArmDistance(slidePos);
             }
             if(gamepad2.right_bumper){RMO.openClaw(0.05);}
             else if(gamepad2.left_bumper){RMO.closeClaw(0.05);}
@@ -108,8 +100,8 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("Position: ", changePos);
             telemetry.addData("G2_RS_Y: ", gamepad2.right_stick_y);
             telemetry.addData("G2_LS_Y: ", gamepad2.left_stick_y);
-            telemetry.addData("Arm Target: ", estArmPos);
-            telemetry.addData("Slide Target: ", estSlidePos);
+            telemetry.addData("Arm Target: ", armPos);
+            telemetry.addData("Slide Target: ", slidePos);
             telemetry.addData("Linslide current detected pos: ", RMO.linearMotor.getCurrentPosition()); //Max ~4000 degrees
             telemetry.addData("Linslide current actual pos: ", RMO.getSlideDegree()); //Max ~2650 degrees
             telemetry.addData("Claw1 pos: ", RMO.claw1.getPosition());

@@ -155,7 +155,7 @@ public class RobotMethods extends LinearOpMode {
     //This method was designed for FTC Centerstage 2023-2024:
     // This method is used to control the arm and intake system's position during autonomous,
     // Need to give time to move otherwise it will not be able to complete the action (can just set a static time in the method)
-    public void intakeAuto(int position, int timeToMove) {
+    /*public void intakeAuto(int position, int timeToMove) {
         //Position 0 is starting position, Position 1 is to intake pixels, Position 2 is to go to the backboard, and position 3 is to put a pixel on the stripe:
         double[][] armPositions = {{0,0.98},{0,0.4},{170,0.95},{20,0.32}};
         for (double time = runtime.milliseconds(); runtime.milliseconds()-time<timeToMove;){
@@ -163,6 +163,10 @@ public class RobotMethods extends LinearOpMode {
             setArmDegree((int)armPositions[position][0]);
         }
         armMotor.setPower(0);
+    }*/
+    public void armAuto(int position){
+        int allocatedTime = 5000; //Milliseconds it is allowed to move
+        double[][] armPositions = {{0,0},{0,-2},{170,0.95},{20,0.32}};
     }
     public void setArmDegreeAuto(int degree){
         int maxTime = 5000; //Limits movement attempt to 5 seconds
@@ -187,7 +191,7 @@ public class RobotMethods extends LinearOpMode {
         slideTarget = getSlideDegree();
         linearMotor.setTargetPosition((int)(distance*encoderRatio));
         linearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linearMotor.setPower(0.3);
+        linearMotor.setPower(0.9);
     }
     public void changeArmDistance(double distance){
         slideTarget = (int)(getSlideDegree()+(distance*encoderRatio));
