@@ -67,7 +67,7 @@ public class MainTeleOp extends LinearOpMode {
             //Full Back (To starting position):
             else if (gamepad2.a) {changePos = 0;}
             //Full forward to intake pixels:
-            else if (gamepad2.b) {changePos = 1;            }
+            else if (gamepad2.b) {changePos = 1;}
             //Deposit pixels on Backboard:
             else if (gamepad2.x) {changePos = 2;}
             //Deposit pixels on stripe:
@@ -92,6 +92,8 @@ public class MainTeleOp extends LinearOpMode {
             if(gamepad2.right_bumper){RMO.openClaw(0.05);}
             else if(gamepad2.left_bumper){RMO.closeClaw(0.05);}
             //else{RMO.stopClaw();}
+            if(gamepad1.dpad_up){RMO.startUsingDriveEncoders();}
+            else if(gamepad1.dpad_down){RMO.stopUsingDriveEncoders();}
 
             //Sends data back to the driver's station:
             //telemetry.addData("Current centimeters from distance sensor: ", RMO.distanceSensor.getDistance(DistanceUnit.CM));

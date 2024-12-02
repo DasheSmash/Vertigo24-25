@@ -188,14 +188,12 @@ public class RobotMethods extends LinearOpMode {
         intakeSystem.setPosition(0.5);
     }
     public void setArmDistance(double distance){
-        slideTarget = getSlideDegree();
         linearMotor.setTargetPosition((int)(distance*encoderRatio));
         linearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearMotor.setPower(0.9);
     }
     public void changeArmDistance(double distance){
-        slideTarget = (int)(getSlideDegree()+(distance*encoderRatio));
-        linearMotor.setTargetPosition((int)slideTarget);
+        linearMotor.setTargetPosition((int)(linearMotor.getCurrentPosition()+(distance*encoderRatio)));
         linearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearMotor.setPower(0.8);
     }
@@ -207,6 +205,26 @@ public class RobotMethods extends LinearOpMode {
         setWheelDegree(leftBackDrive, LB);
         setWheelDegree(rightFrontDrive, RF);
         setWheelDegree(rightBackDrive, RB);
+    }
+    public void testDriveDegree_set(int LF, int LB, int RF, int RB){
+        int maxDeg = LF;
+        maxDeg = Math.max(LF,LB);
+        maxDeg = Math.max(LB,RF);
+        maxDeg = Math.max(RF,RB);
+        testWheelDegree_set(leftFrontDrive, LF, ((double)LF/maxDeg));
+        testWheelDegree_set(leftBackDrive, LB, ((double)LB/maxDeg));
+        testWheelDegree_set(rightFrontDrive, RF, ((double)RF/maxDeg));
+        testWheelDegree_set(rightBackDrive, RB, ((double)RB/maxDeg));
+    }
+    public void testDriveDegree_change(int LF, int LB, int RF, int RB){
+        int maxDeg = LF;
+        maxDeg = Math.max(LF,LB);
+        maxDeg = Math.max(LB,RF);
+        maxDeg = Math.max(RF,RB);
+        testWheelDegree_change(leftFrontDrive, LF, ((double)LF/maxDeg));
+        testWheelDegree_change(leftBackDrive, LB, ((double)LB/maxDeg));
+        testWheelDegree_change(rightFrontDrive, RF, ((double)RF/maxDeg));
+        testWheelDegree_change(rightBackDrive, RB, ((double)RB/maxDeg));
     }
     public void changeDriveDegree(int LF, int LB, int RF, int RB){
         changeWheelDegree(leftFrontDrive, LF);
@@ -227,20 +245,48 @@ public class RobotMethods extends LinearOpMode {
         wheel.setTargetPosition(degree);
         wheel.setPower(1);
     }
+    public void testWheelDegree_set(DcMotor wheel, int degree, double power){
+        wheel.setTargetPosition(degree);
+        wheel.setPower(power);
+    }
+    public void testWheelDegree_change(DcMotor wheel, int degree, double power){
+        wheel.setTargetPosition(degree+wheel.getCurrentPosition());
+        wheel.setPower(power);
+    }
     public void changeWheelDegree(DcMotor wheel, int degree){
         wheel.setTargetPosition(degree+wheel.getCurrentPosition());
         wheel.setPower(1);
     }
+    public void stopUsingDriveEncoders(){
+        //Note: Will reset encoder position to zero if turned back on again:
+        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+    public void startUsingDriveEncoders(){
+        //Note: Will reset encoder position to zero:
+        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
     public void openClaw(double degree){
         claw1.setPosition(claw1.getPosition()+degree);
-        //claw2.setPosition(0.1);
     }
     public void closeClaw(double degree){
         claw1.setPosition(claw1.getPosition()-degree);
-        //claw2.setPosition(0.9);
     }
-    public void stopClaw(){
-        //claw1.setPosition(0.5);
-        //claw2.setPosition(0.5);
-    }
+    /*public void stopClaw(){
+        claw1.setPosition(0.5);
+        claw2.setPosition(0.5);
+    }*/
 }
