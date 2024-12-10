@@ -51,9 +51,9 @@ public class MainTeleOp extends LinearOpMode {
             else if (gamepad1.left_trigger > 0.1f){driveMultiplier = 1;}
             else{driveMultiplier = 0.5;}
 
-            if (gamepad2.right_trigger > 0.1f){distanceMultiplier = 8;}
+            if (gamepad2.right_trigger > 0.1f){distanceMultiplier = 32;}
             else if (gamepad2.left_trigger > 0.1f){distanceMultiplier = 4;}
-            else{distanceMultiplier = 6;}
+            else{distanceMultiplier = 12;}
 
             /*if (gamepad2.left_bumper){armMultiplier = 2;}
             else if (gamepad2.right_bumper){armMultiplier = 0.5;}
@@ -89,11 +89,11 @@ public class MainTeleOp extends LinearOpMode {
                 slidePos = Math.min(slidePos, 0);
                 RMO.setArmDistance(slidePos);
             }
-            if(gamepad2.right_bumper){RMO.openClaw(0.05);}
-            else if(gamepad2.left_bumper){RMO.closeClaw(0.05);}
-            //else{RMO.stopClaw();}
-            if(gamepad1.dpad_up){RMO.startUsingDriveEncoders();}
-            else if(gamepad1.dpad_down){RMO.stopUsingDriveEncoders();}
+            if(gamepad2.right_bumper){RMO.openClaw();}
+            else if(gamepad2.left_bumper){RMO.closeClaw();}
+            else{RMO.stopClaw();}
+            /*if(gamepad1.dpad_up){RMO.startUsingDriveEncoders();}
+            else if(gamepad1.dpad_down){RMO.stopUsingDriveEncoders();}*/
 
             //Sends data back to the driver's station:
             //telemetry.addData("Current centimeters from distance sensor: ", RMO.distanceSensor.getDistance(DistanceUnit.CM));
@@ -106,7 +106,7 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("Slide Target: ", slidePos);
             telemetry.addData("Linslide current detected pos: ", RMO.linearMotor.getCurrentPosition()); //Max ~4000 degrees
             telemetry.addData("Linslide current actual pos: ", RMO.getSlideDegree()); //Max ~2650 degrees
-            telemetry.addData("Claw1 pos: ", RMO.claw1.getPosition());
+            telemetry.addData("Claw1 pos: ", RMO.claw.getPosition());
             telemetry.update();
         }
     }

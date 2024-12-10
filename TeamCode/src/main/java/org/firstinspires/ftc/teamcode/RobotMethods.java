@@ -20,8 +20,7 @@ public class RobotMethods extends LinearOpMode {
     public DcMotor linearMotor;
     public Servo intakeJoint;
     public Servo intakeSystem;
-    public Servo claw1;
-    public Servo claw2;
+    public Servo claw;
     public DistanceSensor distanceSensor;
     private double encoderRatio = 1.5;
     //Set the gear and encoder ratio (if your robot has no encoder then set this to 1):
@@ -44,8 +43,7 @@ public class RobotMethods extends LinearOpMode {
         rightBackDrive = hardwareMap.get(DcMotor.class, "BR");
         armMotor = hardwareMap.get(DcMotor.class, "am1");
         linearMotor = hardwareMap.get(DcMotor.class, "linslide");
-        claw1 = hardwareMap.get(Servo.class, "c1");
-        //claw2 = hardwareMap.get(Servo.class, "c2");
+        claw = hardwareMap.get(Servo.class, "c1");
         //intakeJoint = hardwareMap.get(Servo.class, "servoangle");
         //intakeSystem = hardwareMap.get(Servo.class, "servowheel");
         //distanceSensor = hardwareMap.get(DistanceSensor.class, "DS");
@@ -60,7 +58,7 @@ public class RobotMethods extends LinearOpMode {
         linearMotor.setDirection(DcMotor.Direction.FORWARD); //Sets direction
         linearMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //Sets current position to degree 0
         linearMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //Starts encoder
-        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD); //Sets direction
+        /*leftFrontDrive.setDirection(DcMotor.Direction.FORWARD); //Sets direction
         leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //Sets current position to degree 0
         leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //Starts encoder
         leftBackDrive.setDirection(DcMotor.Direction.FORWARD); //Sets direction
@@ -71,7 +69,7 @@ public class RobotMethods extends LinearOpMode {
         rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //Starts encoder
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD); //Sets direction
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //Sets current position to degree 0
-        rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //Starts encoder
+        rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //Starts encoder*/
     }
 
     //Moves the robot according to given parameters: (Note: the method runs once and sets the power, it does not stop the robot automatically, the user must do that manually by using move(0,0,0) )
@@ -279,14 +277,15 @@ public class RobotMethods extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-    public void openClaw(double degree){
-        claw1.setPosition(claw1.getPosition()+degree);
+    public void openClaw(){
+        //claw1.setPosition(claw1.getPosition()+degree);
+        claw.setPosition(0.1);
     }
-    public void closeClaw(double degree){
-        claw1.setPosition(claw1.getPosition()-degree);
+    public void closeClaw(){
+        //claw1.setPosition(claw1.getPosition()-degree);
+        claw.setPosition(0.9);
     }
-    /*public void stopClaw(){
-        claw1.setPosition(0.5);
-        claw2.setPosition(0.5);
-    }*/
+    public void stopClaw(){
+        claw.setPosition(0.5);
+    }
 }
