@@ -18,6 +18,7 @@ public class RobotMethods extends LinearOpMode {
     public DcMotor rightBackDrive;
     public DcMotor armMotor;
     public DcMotor linearMotor;
+    public DcMotor climbMotor;
     public Servo intakeJoint;
     public Servo intakeSystem;
     public Servo claw;
@@ -126,23 +127,21 @@ public class RobotMethods extends LinearOpMode {
     //This method moves the robot for a set amount of time depending on the call's arguments (Only use for autonomous):
     //haltDistance is the distance in CM of which the robot will stop if the Distance Sensor detects something closer than the specified distance (Used to stop collisions)
     //Set haltDistance to 0 or less if you do not want to use the distance feature.
-    public void timedMotorMove(int maxtime, double axial, double lateral, double yaw, int haltDistance) {
-        for (double startTime = runtime.milliseconds(); runtime.milliseconds() - startTime < maxtime && distanceSensor.getDistance(DistanceUnit.CM) > haltDistance;) {
+    public void timedMotorMove(int time, double axial, double lateral, double yaw) {
+        for (double startTime = runtime.milliseconds(); runtime.milliseconds() - startTime < time;) {
             move(axial, lateral, yaw);
         }
         move(0,0,0); //Stops robot after moving
     }
     //Sets arm to requested degree:
     public void setArmDegree(int degree){
-        armTarget = getArmDegree();
         armMotor.setTargetPosition((int)(degree*degRatio));
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armMotor.setPower(0.3);
+        armMotor.setPower(0.9);
     }
     //Changes arm by requested degree:
     public void changeArmDegree(int degree){
-        armTarget = (int)(getArmDegree()+(degree*encoderRatio));
-        armMotor.setTargetPosition((int)armTarget);
+        armMotor.setTargetPosition((int)(getArmDegree()+(degree*encoderRatio)));
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         armMotor.setPower(0.8);
     }
@@ -186,9 +185,9 @@ public class RobotMethods extends LinearOpMode {
         intakeSystem.setPosition(0.5);
     }
     public void setArmDistance(double distance){
-        linearMotor.setTargetPosition((int)(distance*encoderRatio));
+        linearMotor.setTargetPosition((int)(distance));
         linearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linearMotor.setPower(0.9);
+        linearMotor.setPower(1);
     }
     public void changeArmDistance(double distance){
         linearMotor.setTargetPosition((int)(linearMotor.getCurrentPosition()+(distance*encoderRatio)));

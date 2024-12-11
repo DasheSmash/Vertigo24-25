@@ -50,6 +50,7 @@ public class CloseAutonomous extends LinearOpMode {
         //Moves forward at 0.3 speed for a second:
         //RMO.timedMotorMove(1000, 0.3, 0, 0, 0);
         RMO.setDegreeForward((int)(360*1.5)); //Full rotation of every motor
+
         //Outputs information until the end of the Autonomous Period:
         while (opModeIsActive()) {
             telemetry.update();

@@ -25,10 +25,12 @@ public class MainTeleOp extends LinearOpMode {
         double driveMultiplier = 0.5;
         double armMultiplier = 1;
         double distanceMultiplier = 1;
+        double climbMultiplier;
         double armChange = 0.0;
         double slideChange = 0.0;
-        int armPos = 0;
+        double armPos = 0.0;
         int slidePos = 0;
+        int climbPos = 0;
         int changePos = -1;
         double[][] armPositions = {{0,0.98},{0,0.4},{170,0.95},{20,0.32}}; // Preset arm positions
 
@@ -51,9 +53,13 @@ public class MainTeleOp extends LinearOpMode {
             else if (gamepad1.left_trigger > 0.1f){driveMultiplier = 1;}
             else{driveMultiplier = 0.5;}
 
-            if (gamepad2.right_trigger > 0.1f){distanceMultiplier = 32;}
+            if (gamepad2.right_trigger > 0.1f){distanceMultiplier = 40;}
             else if (gamepad2.left_trigger > 0.1f){distanceMultiplier = 4;}
             else{distanceMultiplier = 12;}
+
+            if(gamepad1.right_bumper){climbMultiplier = 8;}
+            else if (gamepad2.left_bumper){climbMultiplier = 4;}
+            else{climbMultiplier = 6;}
 
             /*if (gamepad2.left_bumper){armMultiplier = 2;}
             else if (gamepad2.right_bumper){armMultiplier = 0.5;}
@@ -77,15 +83,15 @@ public class MainTeleOp extends LinearOpMode {
 
             //Arm Code:
             //DO: make armPos unable to go above 15 degrees, and unable to go below -80 degrees
-            armChange = gamepad2.right_stick_y * armMultiplier;
+            armChange = -gamepad2.right_stick_y * armMultiplier;
             slideChange = gamepad2.left_stick_y * distanceMultiplier;
-            if (Math.abs(armChange) > 0.1){
-                armPos += (int)armChange;
-                RMO.setArmDegree(armPos);
+            if (Math.abs(armChange) > 0){
+                armPos += armChange;
+                RMO.setArmDegree((int)armPos);
             }
             if (Math.abs(slideChange) > 0.1){
                 slidePos += (int)slideChange;
-                slidePos = Math.max(slidePos, -2700);
+                slidePos = Math.max(slidePos, -1630);
                 slidePos = Math.min(slidePos, 0);
                 RMO.setArmDistance(slidePos);
             }
@@ -104,7 +110,7 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("G2_LS_Y: ", gamepad2.left_stick_y);
             telemetry.addData("Arm Target: ", armPos);
             telemetry.addData("Slide Target: ", slidePos);
-            telemetry.addData("Linslide current detected pos: ", RMO.linearMotor.getCurrentPosition()); //Max ~4000 degrees
+            telemetry.addData("Linslide current detected pos: ", RMO.linearMotor.getCurrentPosition()); //Max ~-1600 degrees
             telemetry.addData("Linslide current actual pos: ", RMO.getSlideDegree()); //Max ~2650 degrees
             telemetry.addData("Claw1 pos: ", RMO.claw.getPosition());
             telemetry.update();

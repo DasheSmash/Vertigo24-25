@@ -47,9 +47,10 @@ public class FarAutonomous extends LinearOpMode {
         telemetry.update();
         waitForStart();
         runtime.reset();
-        //Moves forward at 0.3 speed for a second:
-        //RMO.timedMotorMove(1000, 0.3, 0, 0, 0);
-        RMO.setDegreeForward((int)(360*1.5)); //Full rotation of every motor
+        RMO.timedMotorMove(1000,0,1,0);
+        RMO.timedMotorMove(2000,1,0,0);
+        RMO.timedMotorMove(500,0,0,1);
+        RMO.timedMotorMove(1000, -0.5,0,0);
         //Outputs information until the end of the Autonomous Period:
         while (opModeIsActive()) {
             telemetry.update();
