@@ -33,6 +33,8 @@ public class MainTeleOp extends LinearOpMode {
         int climbPos = 0;
         int changePos = -1;
         double[][] armPositions = {{0,0.98},{0,0.4},{170,0.95},{20,0.32}}; // Preset arm positions
+        boolean intake = false;
+        boolean released = true;
 
         //Waits for the play button to be pressed:
         waitForStart();
@@ -95,9 +97,18 @@ public class MainTeleOp extends LinearOpMode {
                 slidePos = Math.min(slidePos, 0);
                 RMO.setArmDistance(slidePos);
             }
+            /*
             if(gamepad2.right_bumper){RMO.openClaw();}
             else if(gamepad2.left_bumper){RMO.closeClaw();}
-            else{RMO.stopClaw();}
+            else{RMO.stopClaw();}*/
+            if(gamepad2.right_bumper && released){
+                if(intake){RMO.closeClaw();}
+                else{RMO.openClaw();}
+                intake = !intake;
+                released = false;
+            }
+            else if (!gamepad2.right_bumper){released = true;}
+            if(gamepad2.left_bumper){RMO.stopClaw();}
             /*if(gamepad1.dpad_up){RMO.startUsingDriveEncoders();}
             else if(gamepad1.dpad_down){RMO.stopUsingDriveEncoders();}*/
 
