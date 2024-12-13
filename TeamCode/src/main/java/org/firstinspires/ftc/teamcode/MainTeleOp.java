@@ -49,18 +49,20 @@ public class MainTeleOp extends LinearOpMode {
             axial = driveMultiplier * (-gamepad1.left_stick_y);  // Note: pushing stick forward gives negative value
             lateral = driveMultiplier * (gamepad1.left_stick_x);
             yaw = driveMultiplier * (-gamepad1.right_stick_x);
+            if(Math.abs(gamepad2.left_trigger) > 0.1f){yaw += -gamepad2.right_stick_x * 0.25; lateral += gamepad2.left_stick_x * 0.25;}
+            //if(Math.abs(gamepad2.left_stick_x) > 0.1f){lateral += gamepad2.left_stick_x * 0.25;}
 
             //Determines speed setting:
             if (gamepad1.right_trigger > 0.1f){driveMultiplier = 0.25;}
             else if (gamepad1.left_trigger > 0.1f){driveMultiplier = 1;}
             else{driveMultiplier = 0.5;}
 
-            if (gamepad2.right_trigger > 0.1f){distanceMultiplier = 40;}
-            else if (gamepad2.left_trigger > 0.1f){distanceMultiplier = 4;}
+            if (gamepad2.left_stick_button){distanceMultiplier = 40;}
+            else if (gamepad2.right_trigger > 0.1f){distanceMultiplier = 4;}
             else{distanceMultiplier = 12;}
 
             if(gamepad1.right_bumper){climbMultiplier = 8;}
-            else if (gamepad2.left_bumper){climbMultiplier = 4;}
+            else if (gamepad1.left_bumper){climbMultiplier = 4;}
             else{climbMultiplier = 6;}
 
             /*if (gamepad2.left_bumper){armMultiplier = 2;}
@@ -108,7 +110,7 @@ public class MainTeleOp extends LinearOpMode {
                 released = false;
             }
             else if (!gamepad2.right_bumper){released = true;}
-            if(gamepad2.left_bumper){RMO.stopClaw();}
+            if(gamepad2.left_bumper){RMO.stopClaw(); intake = false;}
             /*if(gamepad1.dpad_up){RMO.startUsingDriveEncoders();}
             else if(gamepad1.dpad_down){RMO.stopUsingDriveEncoders();}*/
 

@@ -278,11 +278,11 @@ public class RobotMethods extends LinearOpMode {
     }
     public void openClaw(){
         //claw1.setPosition(claw1.getPosition()+degree);
-        claw.setPosition(0.1);
+        claw.setPosition(0.9);
     }
     public void closeClaw(){
         //claw1.setPosition(claw1.getPosition()-degree);
-        claw.setPosition(0.9);
+        claw.setPosition(0.1);
     }
     public void stopClaw(){
         claw.setPosition(0.5);
