@@ -135,7 +135,7 @@ public class RobotMethods extends LinearOpMode {
     }
     //Sets arm to requested degree:
     public void setArmDegree(int degree){
-        armMotor.setTargetPosition((int)(degree*degRatio));
+        armMotor.setTargetPosition(degree);
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         armMotor.setPower(0.9);
     }

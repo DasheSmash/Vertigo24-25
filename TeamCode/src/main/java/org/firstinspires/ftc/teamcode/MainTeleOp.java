@@ -23,7 +23,7 @@ public class MainTeleOp extends LinearOpMode {
         double yaw = 0.0;
         //Variables for drive speed, arm speed, manual arm movement, and preset arm positions:
         double driveMultiplier = 0.5;
-        double armMultiplier = 1;
+        double armMultiplier = 15;
         double distanceMultiplier = 1;
         double climbMultiplier;
         double armChange = 0.0;
@@ -32,7 +32,7 @@ public class MainTeleOp extends LinearOpMode {
         int slidePos = 0;
         int climbPos = 0;
         int changePos = -1;
-        double[][] armPositions = {{0,0.98},{0,0.4},{170,0.95},{20,0.32}}; // Preset arm positions
+        double[][] armPositions = {{0,0.98},{0,0.4},{170,0.95},{20,0.32}}; // (NOT IN USE) Preset arm positions
         boolean intake = false;
         boolean released = true;
 
@@ -72,16 +72,19 @@ public class MainTeleOp extends LinearOpMode {
             //Implements the changes to the robot's position from other parts of the code:
             RMO.move(axial,lateral,yaw);
 
-            //Preset arm position code:
-            if (gamepad2.dpad_left){changePos = -1;}
             //Full Back (To starting position):
-            else if (gamepad2.a) {changePos = 0;}
+            if (gamepad2.a) {armPos = -450;}
             //Full forward to intake pixels:
-            else if (gamepad2.b) {changePos = 1;}
+            else if (gamepad2.b) {armPos = 600;}
             //Deposit pixels on Backboard:
-            else if (gamepad2.x) {changePos = 2;}
+            else if (gamepad2.x) {slidePos = 5;}
             //Deposit pixels on stripe:
-            else if (gamepad2.y) {changePos = 3;}
+            else if (gamepad2.y) {slidePos = -1630;}
+
+            if(gamepad2.dpad_left){RMO.timedMotorMove(500, 0, -1, 0);} //Goes right
+            else if (gamepad2.dpad_right){RMO.timedMotorMove(500, 0, 1, 0);} //Goes left
+            if (gamepad2.dpad_up){RMO.timedMotorMove(500,0,0,1);} //Turns left
+            else if (gamepad2.dpad_down){RMO.timedMotorMove(500,0,0,-1);} //Turns right
             //if(gamepad2.b || gamepad2.a || gamepad2.x || gamepad2.y){armChange = 0;}
             //if(changePos != -1){RMO.setArmDegree((int)(armPositions[changePos][0] + armChange));}
 
@@ -89,11 +92,11 @@ public class MainTeleOp extends LinearOpMode {
             //DO: make armPos unable to go above 15 degrees, and unable to go below -80 degrees
             armChange = -gamepad2.right_stick_y * armMultiplier;
             slideChange = gamepad2.left_stick_y * distanceMultiplier;
-            if (Math.abs(armChange) > 0){
+            if (true){ //Condition temporarily disabled
                 armPos += armChange;
                 RMO.setArmDegree((int)armPos);
             }
-            if (Math.abs(slideChange) > 0.1){
+            if (true){ //Condition temporarily disabled
                 slidePos += (int)slideChange;
                 slidePos = Math.max(slidePos, -1630);
                 slidePos = Math.min(slidePos, 0);
