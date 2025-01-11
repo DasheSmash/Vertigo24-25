@@ -25,6 +25,7 @@ public class MainTeleOp extends LinearOpMode {
         double driveMultiplier = 0.5;
         double armMultiplier = 15;
         double distanceMultiplier = 1;
+        double slideGearRatio = 0.5;
         double climbMultiplier;
         double armChange = 0.0;
         double slideChange = 0.0;
@@ -57,9 +58,9 @@ public class MainTeleOp extends LinearOpMode {
             else if (gamepad1.left_trigger > 0.1f){driveMultiplier = 1;}
             else{driveMultiplier = 0.5;}
 
-            if (gamepad2.left_stick_button){distanceMultiplier = 40;}
-            else if (gamepad2.right_trigger > 0.1f){distanceMultiplier = 4;}
-            else{distanceMultiplier = 12;}
+            /*if (gamepad2.left_stick_button){distanceMultiplier = 80/slideGearRatio;}
+            else*/ if (gamepad2.right_trigger > 0.1f){distanceMultiplier = 8/slideGearRatio;}
+            else{distanceMultiplier = 24/slideGearRatio;}
 
             if(gamepad1.right_bumper){climbMultiplier = 8;}
             else if (gamepad1.left_bumper){climbMultiplier = 4;}
@@ -98,7 +99,7 @@ public class MainTeleOp extends LinearOpMode {
             }
             if (true){ //Condition temporarily disabled
                 slidePos += (int)slideChange;
-                slidePos = Math.max(slidePos, -1750);
+                slidePos = Math.max(slidePos, (int)(-3500/slideGearRatio));
                 slidePos = Math.min(slidePos, 0);
                 RMO.setArmDistance(slidePos);
             }
