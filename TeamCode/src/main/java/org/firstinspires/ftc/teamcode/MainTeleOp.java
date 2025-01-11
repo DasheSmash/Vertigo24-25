@@ -42,7 +42,7 @@ public class MainTeleOp extends LinearOpMode {
         runtime.reset();
         //Repeatedly runs after the play button is pressed:
         while(opModeIsActive()) {
-
+            if(gamepad1.dpad_up){RMO.freeSlide();}
             // Pressing "back" on either of the controllers will stop the code:
             if (gamepad1.back || gamepad2.back){terminateOpModeNow();}
 

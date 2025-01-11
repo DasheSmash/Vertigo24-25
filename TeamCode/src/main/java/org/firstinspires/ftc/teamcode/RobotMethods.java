@@ -50,6 +50,9 @@ public class RobotMethods extends LinearOpMode {
         //distanceSensor = hardwareMap.get(DistanceSensor.class, "DS");
         setupMotors(); //Method for all of the arm motor setup. Doesn't need to be in a method but it's more organized that way.
     }
+    public void freeSlide(){
+        linearMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
 
     //Sets the direction of the motor and enables the encoder for the motor:
     public void setupMotors() {
@@ -73,7 +76,8 @@ public class RobotMethods extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //Starts encoder*/
     }
 
-    //Moves the robot according to given parameters: (Note: the method runs once and sets the power, it does not stop the robot automatically, the user must do that manually by using move(0,0,0) )
+    //Moves the robot according to given parameters: (Note: the method runs once and sets the power,
+    // it does not stop the robot automatically, the user must do that manually by using move(0,0,0) )
     public void move(double axial, double lateral, double yaw) {
         double max;
         double leftFrontPower = axial + lateral + yaw;
