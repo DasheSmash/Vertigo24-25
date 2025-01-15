@@ -73,14 +73,14 @@ public class MainTeleOp extends LinearOpMode {
             //Implements the changes to the robot's position from other parts of the code:
             RMO.move(axial,lateral,yaw);
 
-            //Full Back (To starting position):
+            /*//Full Back (To starting position):
             if (gamepad2.a) {armPos = -600;}
             //Full forward to intake pixels:
             else if (gamepad2.b) {armPos = 450;}
             //Deposit pixels on Backboard:
             else if (gamepad2.x) {slidePos = 5;}
             //Deposit pixels on stripe:
-            else if (gamepad2.y) {slidePos = -1750;}
+            else if (gamepad2.y) {slidePos = -1750;}*/
 
             if(gamepad2.dpad_left){RMO.timedMotorMove(500, 0, -1, 0);} //Goes right
             else if (gamepad2.dpad_right){RMO.timedMotorMove(500, 0, 1, 0);} //Goes left
