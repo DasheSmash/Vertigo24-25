@@ -47,7 +47,7 @@ public class FarAutonomous extends LinearOpMode {
         telemetry.update();
         waitForStart();
         runtime.reset();
-        RMO.timedMotorMove(1000,0,-1,0);
+        RMO.timedMotorMove(2500,0,-0.5,0);
         //Outputs information until the end of the Autonomous Period:
         while (opModeIsActive()) {
             telemetry.update();

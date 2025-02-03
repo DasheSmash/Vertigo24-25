@@ -107,14 +107,21 @@ public class MainTeleOp extends LinearOpMode {
             if(gamepad2.right_bumper){RMO.openClaw();}
             else if(gamepad2.left_bumper){RMO.closeClaw();}
             else{RMO.stopClaw();}*/
-            if(gamepad2.right_bumper && released){
-                if(intake){RMO.closeClaw();}
-                else{RMO.openClaw();}
+            if(gamepad2.left_bumper && released){
                 intake = !intake;
                 released = false;
             }
-            else if (!gamepad2.right_bumper){released = true;}
-            if(gamepad2.left_bumper){RMO.stopClaw(); intake = false;}
+
+            if (!gamepad2.left_bumper){released = true;}
+
+            if(intake){
+                if(gamepad2.right_bumper){
+                    RMO.closeClaw();
+                }else{
+                    RMO.openClaw();
+                }
+            }
+
             /*if(gamepad1.dpad_up){RMO.startUsingDriveEncoders();}
             else if(gamepad1.dpad_down){RMO.stopUsingDriveEncoders();}*/
 
