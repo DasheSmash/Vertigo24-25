@@ -62,7 +62,7 @@ public class RobotMethods extends LinearOpMode {
         linearMotor.setDirection(DcMotor.Direction.FORWARD); //Sets direction
         linearMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //Sets current position to degree 0
         linearMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //Starts encoder
-        /*leftFrontDrive.setDirection(DcMotor.Direction.FORWARD); //Sets direction
+        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD); //Sets direction
         leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //Sets current position to degree 0
         leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //Starts encoder
         leftBackDrive.setDirection(DcMotor.Direction.FORWARD); //Sets direction
@@ -234,16 +234,19 @@ public class RobotMethods extends LinearOpMode {
         changeWheelDegree(rightBackDrive, RB);
     }
     public void setDegreeForward(int degree){
-        setWheelDegree(leftFrontDrive, degree);
-        setWheelDegree(leftBackDrive, degree);
-        setWheelDegree(rightFrontDrive, degree);
-        setWheelDegree(rightBackDrive, degree);
+        for(double time = runtime.milliseconds();runtime.milliseconds()-time<2000;) {
+            setWheelDegree(leftFrontDrive, degree);
+            setWheelDegree(leftBackDrive, degree);
+            setWheelDegree(rightFrontDrive, degree);
+            setWheelDegree(rightBackDrive, degree);
+        }
     }
     public int getWheelDegree(DcMotor wheel){
         return (int)(wheel.getCurrentPosition()/encoderRatio);
     }
     public void setWheelDegree(DcMotor wheel, int degree){
         wheel.setTargetPosition(degree);
+        wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         wheel.setPower(1);
     }
     public void testWheelDegree_set(DcMotor wheel, int degree, double power){
@@ -269,7 +272,7 @@ public class RobotMethods extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-    public void startUsingDriveEncoders(){
+    public void startUsingDriveEncoders() {
         //Note: Will reset encoder position to zero:
         leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

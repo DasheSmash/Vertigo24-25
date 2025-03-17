@@ -14,8 +14,9 @@ public class MainTeleOp extends LinearOpMode {
         ElapsedTime runtime = new ElapsedTime();
         RobotMethods RMO = new RobotMethods(hardwareMap);
         //Sets the robot's wheels to go 'backwards', and for the robot's motors to brake when at 0 power:
-        RMO.SetDirectionBackwards();
+        RMO.SetDirectionForward();
         RMO.setZeroBehaviorAll();
+        RMO.startUsingDriveEncoders();
 
         //Variables to move the robot:
         double axial = 0.0;
@@ -42,7 +43,7 @@ public class MainTeleOp extends LinearOpMode {
         runtime.reset();
         //Repeatedly runs after the play button is pressed:
         while(opModeIsActive()) {
-            if(gamepad1.dpad_up){RMO.freeSlide();}
+            //if(gamepad1.dpad_up){RMO.freeSlide();}
             // Pressing "back" on either of the controllers will stop the code:
             if (gamepad1.back || gamepad2.back){terminateOpModeNow();}
 
@@ -71,7 +72,7 @@ public class MainTeleOp extends LinearOpMode {
             else{armMultiplier = 1;}*/
 
             //Implements the changes to the robot's position from other parts of the code:
-            RMO.move(axial,lateral,yaw);
+            RMO.move(axial,lateral,-yaw);
 
             /*//Full Back (To starting position):
             if (gamepad2.a) {armPos = -600;}
@@ -107,6 +108,9 @@ public class MainTeleOp extends LinearOpMode {
             if(gamepad2.right_bumper){RMO.openClaw();}
             else if(gamepad2.left_bumper){RMO.closeClaw();}
             else{RMO.stopClaw();}*/
+            if(gamepad1.dpad_up){
+                RMO.setDegreeForward(1080);
+            }
             if(gamepad2.left_bumper && released){
                 intake = !intake;
                 released = false;
@@ -137,6 +141,10 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("Linslide current detected pos: ", RMO.linearMotor.getCurrentPosition()); //Max ~-1600 degrees
             telemetry.addData("Linslide current actual pos: ", RMO.getSlideDegree()); //Max ~2650 degrees
             telemetry.addData("Claw1 pos: ", RMO.claw.getPosition());
+            telemetry.addData("FR pos: ", RMO.rightFrontDrive.getCurrentPosition());
+            telemetry.addData("FL pos: ", RMO.leftFrontDrive.getCurrentPosition());
+            telemetry.addData("BR pos: ", RMO.rightBackDrive.getCurrentPosition());
+            telemetry.addData("BL pos: ", RMO.leftBackDrive.getCurrentPosition());
             telemetry.update();
         }
     }
