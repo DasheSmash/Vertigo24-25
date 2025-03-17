@@ -241,6 +241,30 @@ public class RobotMethods extends LinearOpMode {
             setWheelDegree(rightBackDrive, degree);
         }
     }
+    public void changeDegreeForward(int degree){
+        for(double time = runtime.milliseconds();runtime.milliseconds()-time<2000;) {
+            setWheelDegree(leftFrontDrive, (degree + leftFrontDrive.getCurrentPosition()));
+            setWheelDegree(leftBackDrive, (degree + leftBackDrive.getCurrentPosition()));
+            setWheelDegree(rightFrontDrive, (degree + rightFrontDrive.getCurrentPosition()));
+            setWheelDegree(rightBackDrive, (degree + rightBackDrive.getCurrentPosition()));
+        }
+    }
+    public void setDegreeSide(int degree){
+        for(double time = runtime.milliseconds();runtime.milliseconds()-time<2000;) {
+            setWheelDegree(leftFrontDrive, degree);
+            setWheelDegree(leftBackDrive, -degree);
+            setWheelDegree(rightFrontDrive, -degree);
+            setWheelDegree(rightBackDrive, degree);
+        }
+    }
+    public void changeDegreeSide(int degree){
+        for(double time = runtime.milliseconds();runtime.milliseconds()-time<2000;) {
+            setWheelDegree(leftFrontDrive, (degree + leftFrontDrive.getCurrentPosition()));
+            setWheelDegree(leftBackDrive, (-degree + leftBackDrive.getCurrentPosition()));
+            setWheelDegree(rightFrontDrive, (-degree + rightFrontDrive.getCurrentPosition()));
+            setWheelDegree(rightBackDrive, (degree + rightBackDrive.getCurrentPosition()));
+        }
+    }
     public int getWheelDegree(DcMotor wheel){
         return (int)(wheel.getCurrentPosition()/encoderRatio);
     }

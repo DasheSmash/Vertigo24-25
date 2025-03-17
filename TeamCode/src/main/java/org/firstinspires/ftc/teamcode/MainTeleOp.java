@@ -111,6 +111,27 @@ public class MainTeleOp extends LinearOpMode {
             if(gamepad1.dpad_up){
                 RMO.setDegreeForward(1080);
             }
+            if(gamepad1.dpad_down){
+                RMO.setDegreeForward(-1080);
+            }
+            if(gamepad1.dpad_left){
+                RMO.setDegreeSide(-1080);
+            }
+            if(gamepad1.dpad_right){
+                RMO.setDegreeSide(1080);
+            }
+            if(gamepad1.y){
+                RMO.changeDegreeForward(1080);
+            }
+            if(gamepad1.a){
+                RMO.changeDegreeForward(-1080);
+            }
+            if(gamepad1.x){
+                RMO.changeDegreeSide(-1080);
+            }
+            if(gamepad1.b){
+                RMO.changeDegreeSide(1080);
+            }
             if(gamepad2.left_bumper && released){
                 intake = !intake;
                 released = false;
